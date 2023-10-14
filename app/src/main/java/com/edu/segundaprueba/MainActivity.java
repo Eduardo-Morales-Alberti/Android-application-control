@@ -81,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Runnable runnableTask = () -> {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
             try {
                 myAppSocketRead = new java.net.Socket(inetAddress, 21566);
                 dataInputStream = new BufferedReader(new InputStreamReader(myAppSocketRead.getInputStream()));
@@ -94,17 +95,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
 
 
-        };
-        Thread thread = new Thread(runnableTask);
-        thread.start();
+        });
 
-        Runnable runnableTask_2 = () -> {
+        executor.execute(() -> {
             try{
                 myAppSocketWrite = getMyAppSocketWrite();
                 dataOutputStream = new DataOutputStream(myAppSocketWrite.getOutputStream());
@@ -114,16 +112,14 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        };
+        });
 
-        Thread thread_2 = new Thread(runnableTask_2);
-        thread_2.start();
     }
 
     protected void setAction(String action) {
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        Runnable runnableTask = () -> {
+        executor.execute(() -> {
             try{
                 myAppSocketWrite = getMyAppSocketWrite();
                 dataOutputStream = new DataOutputStream(myAppSocketWrite.getOutputStream());
@@ -132,8 +128,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        };
-        executor.execute(runnableTask);
+        });
 
     }
 
