@@ -84,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             try {
-                myAppSocketRead = new java.net.Socket(inetAddress, 21566);
-                dataInputStream = new BufferedReader(new InputStreamReader(myAppSocketRead.getInputStream()));
+                myAppSocketWrite = getMyAppSocketWrite();
+                dataInputStream = new BufferedReader(new InputStreamReader(myAppSocketWrite.getInputStream()));
 
                 while (true) {
                     String strCurrentLine = "";
